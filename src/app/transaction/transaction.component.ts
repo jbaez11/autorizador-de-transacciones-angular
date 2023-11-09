@@ -2,11 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-account',
-  templateUrl: './account.component.html',
-  styleUrls: ['./account.component.scss']
+  selector: 'app-transaction',
+  templateUrl: './transaction.component.html',
+  styleUrls: ['./transaction.component.scss']
 })
-export class AccountComponent {
+export class TransactionComponent {
   accountsObject: {
     [key: string]: {
       id: number;
@@ -17,19 +17,20 @@ export class AccountComponent {
     }
   } = {};
   id: number = 0;
-  tarjeta_activa: boolean = false;
-  limite_disponible: number = 0;
-  transactions : any[]=[];
+  comerciante: string = '';
+  cantidad: number = 0;
+  tiempo = '';
+  activeButton : boolean = false;
 
   constructor(private http: HttpClient )
   {
-    this.getAllAccounts();
+    this.getAllTransaction();
   }
 
   ngOnInit(): void {
   }
 
-  getAllAccounts() {
+  getAllTransaction() {
     this.http.get("http://localhost:3001/getAccounts").subscribe(
       (resultData: any) => {
         console.log(resultData);
@@ -41,22 +42,30 @@ export class AccountComponent {
     );
   }
 
+  obtenerFechaYHora(){
+    const fecha = (document.getElementById('fecha') as HTMLInputElement).value;
+    const hora = (document.getElementById('hora') as HTMLInputElement).value;
+    this.tiempo = fecha + 'T' + hora;
+    if(fecha && hora) this.activeButton=true
+  }
+
   register()
   {
     let bodyData = {
-      "cuenta":{
+      "transaccion":{
         "id" : this.id,
-        "limite_disponible" : this.limite_disponible,
-        "tarjeta_activa" : this.tarjeta_activa,
+        "comerciante" : this.comerciante,
+        "cantidad" : this.cantidad,
+        "tiempo" : this.tiempo
       }
 
     };
 
-    this.http.post("http://localhost:3001/createAccount",bodyData).subscribe((resultData: any)=>
+    this.http.post("http://localhost:3001/authorizeTransaction",bodyData).subscribe((resultData: any)=>
     {
         console.log(resultData);
         alert("Registered Successfully")
-        this.getAllAccounts();
+        this.getAllTransaction();
     });
   }
 
