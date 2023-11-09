@@ -1,0 +1,53 @@
+<div class="container mt-4" >
+  <div class="card">
+          <h1>Account Registation</h1>
+
+  <form>
+      <div class="form-group">
+        <label>id</label>
+        <input type="number" [(ngModel)]="id" [ngModelOptions]="{standalone: true}" class="form-control" id="id" placeholder="Enter Name">
+      </div>
+
+      <div class="form-group">
+        <label>tarjeta_activa</label>
+        <input type="text" [(ngModel)]="tarjeta_activa" [ngModelOptions]="{standalone: true}" class="form-control" id="tarjeta_activa" placeholder="Enter Name">
+      </div>
+
+      <div class="form-group">
+          <label>limite_disponible</label>
+          <input type="text" [(ngModel)]="limite_disponible" [ngModelOptions]="{standalone: true}" class="form-control" id="limite_disponible" placeholder="Enter limite_disponible">
+        </div>
+
+
+
+      <button type="submit" class="btn btn-primary mt-4" (click)="save()" >Save</button>
+
+    </form>
+  </div>
+
+
+
+      <div class="container mt-4" >
+          <h1>Account Table</h1>
+      <table class="table">
+          <thead>
+           <h1 *ngIf="!isResultLoaded">Loading.................</h1>
+          <tr>
+              <th scope="col">Item</th>
+              <th scope="col">ID</th>
+              <th scope="col">tarjeta_activa</th>
+              <th scope="col">limite_disponible</th>
+              <th scope="col">violaciones</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let accountId of accountsObject | keyvalue">
+                <td>{{ accountId.key }}</td>
+                <td>{{ accountId.value.id }}</td>
+                <td>{{ accountId.value.tarjeta_activa }}</td>
+                <td>{{ accountId.value.limite_disponible }}</td>
+                <td>{{ accountId.value.violaciones?.join(', ') }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
