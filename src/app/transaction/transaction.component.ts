@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { TransactionService } from '../services/transaction.service';
 
 @Component({
   selector: 'app-transaction',
@@ -22,7 +23,7 @@ export class TransactionComponent {
   tiempo = '';
   activeButton : boolean = false;
 
-  constructor(private http: HttpClient )
+  constructor(private transactionService: TransactionService)
   {
     this.getAllTransaction();
   }
@@ -31,44 +32,38 @@ export class TransactionComponent {
   }
 
   getAllTransaction() {
-    this.http.get("http://localhost:3001/getAccounts").subscribe(
+    this.transactionService.getAllTransactions().subscribe(
       (resultData: any) => {
         console.log(resultData);
         this.accountsObject = resultData;
       },
       (error) => {
-        console.error("Error while fetching accounts: ", error);
+        console.error("Error while fetching transactions: ", error);
       }
     );
   }
 
-  obtenerFechaYHora(){
+  obtenerFechaYHora() {
     const fecha = (document.getElementById('fecha') as HTMLInputElement).value;
     const hora = (document.getElementById('hora') as HTMLInputElement).value;
     this.tiempo = fecha + 'T' + hora;
-    if(fecha && hora) this.activeButton=true
+    if (fecha && hora) this.activeButton = true;
   }
 
-  register()
-  {
-    let bodyData = {
-      "transaccion":{
-        "id" : this.id,
-        "comerciante" : this.comerciante,
-        "cantidad" : this.cantidad,
-        "tiempo" : this.tiempo
-      }
-
+  register() {
+    const transactionData = {
+      id: this.id,
+      comerciante: this.comerciante,
+      cantidad: this.cantidad,
+      tiempo: this.tiempo,
     };
 
-    this.http.post("http://localhost:3001/authorizeTransaction",bodyData).subscribe((resultData: any)=>
-    {
-        console.log(resultData);
-        alert("Registered Successfully")
-        this.getAllTransaction();
+    this.transactionService.authorizeTransaction(transactionData).subscribe((resultData: any) => {
+      console.log(resultData);
+      alert("Registered Successfully");
+      this.getAllTransaction();
     });
   }
-
   save(){
     this.register();
   }

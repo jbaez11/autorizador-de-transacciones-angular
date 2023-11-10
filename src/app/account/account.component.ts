@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-account',
@@ -21,7 +22,7 @@ export class AccountComponent {
   limite_disponible: number = 0;
   transactions : any[]=[];
 
-  constructor(private http: HttpClient )
+  constructor(private accountService: AccountService)
   {
     this.getAllAccounts();
   }
@@ -30,7 +31,7 @@ export class AccountComponent {
   }
 
   getAllAccounts() {
-    this.http.get("http://localhost:3001/getAccounts").subscribe(
+    this.accountService.getAllAccounts().subscribe(
       (resultData: any) => {
         console.log(resultData);
         this.accountsObject = resultData;
@@ -41,22 +42,11 @@ export class AccountComponent {
     );
   }
 
-  register()
-  {
-    let bodyData = {
-      "cuenta":{
-        "id" : this.id,
-        "limite_disponible" : this.limite_disponible,
-        "tarjeta_activa" : this.tarjeta_activa,
-      }
-
-    };
-
-    this.http.post("http://localhost:3001/createAccount",bodyData).subscribe((resultData: any)=>
-    {
-        console.log(resultData);
-        alert("Registered Successfully")
-        this.getAllAccounts();
+  register() {
+    this.accountService.registerAccount(this.id, this.limite_disponible, this.tarjeta_activa).subscribe((resultData: any) => {
+      console.log(resultData);
+      alert("Registered Successfully");
+      this.getAllAccounts();
     });
   }
 
