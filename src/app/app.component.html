@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<div class="container">
+  <aside id="sidebar">
+    <ul>
+      <li><a routerLink="/">Cuentas</a></li>
+      <li><a routerLink="/transaction">Transacciones</a></li>
+    </ul>
+  </aside>
+
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>

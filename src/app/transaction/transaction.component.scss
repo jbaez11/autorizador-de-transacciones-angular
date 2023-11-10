@@ -1,0 +1,29 @@
+.card {
+  border: 1px solid #000;
+  margin-bottom: 20px;
+}
+
+.card-header, .card-title {
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+}
+
+.btn-primary {
+  background-color: #000;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: #333;
+}
+
+.table {
+  margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+}
